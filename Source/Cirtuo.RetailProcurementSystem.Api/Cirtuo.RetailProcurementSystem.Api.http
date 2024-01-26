@@ -1,0 +1,6 @@
+@Cirtuo.RetailProcurementSystem.Api_HostAddress = http://localhost:5245
+
+GET {{Cirtuo.RetailProcurementSystem.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
