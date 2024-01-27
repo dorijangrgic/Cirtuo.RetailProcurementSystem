@@ -10,7 +10,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddApplicationLayer()
-    .AddPersistenceLayer(builder.Configuration);
+    .AddPersistenceLayer(builder.Configuration, builder.Environment.IsDevelopment());
 
 var app = builder.Build();
 
