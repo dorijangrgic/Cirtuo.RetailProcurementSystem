@@ -11,11 +11,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).UseIdentityAlwaysColumn();
-        builder.Property(x => x.RetailerId).IsRequired();
         builder.Property(x => x.OrderDate).IsRequired();
         builder.Property(x => x.DeliveryDate);
         builder.Property(x => x.PaymentDate);
-        builder.Property(x => x.TotalPrice).IsRequired();
+        builder.Property(x => x.TotalPrice).IsRequired().HasPrecision(1000, 5);
 
         builder.HasOne(x => x.Retailer)
             .WithMany(x => x.Orders)

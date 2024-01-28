@@ -2,7 +2,7 @@ namespace Cirtuo.RetailProcurementSystem.Domain;
 
 public class SupplierStoreItem
 {
-    public int Id { get; }
+    public int Id { get; private set; }
     public int SupplierId { get; private set; }
     public int StoreItemId { get; private set; }
     public DateTime StartDate { get; private set; }
@@ -15,9 +15,10 @@ public class SupplierStoreItem
     public Supplier Supplier { get; private set; }
     public StoreItem StoreItem { get; private set; }
     public ICollection<OrderItem> OrderItems { get; private set; }
+    
+    public SupplierStoreItem() { }
 
     public SupplierStoreItem(
-        int id,
         int supplierId,
         int storeItemId,
         DateTime startDate,
@@ -28,7 +29,6 @@ public class SupplierStoreItem
         int soldItems
     )
     {
-        Id = id;
         SupplierId = supplierId;
         StoreItemId = storeItemId;
         StartDate = startDate;

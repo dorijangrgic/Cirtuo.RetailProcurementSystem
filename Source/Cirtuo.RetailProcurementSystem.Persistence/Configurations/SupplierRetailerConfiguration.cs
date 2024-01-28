@@ -11,8 +11,6 @@ public class SupplierRetailerConfiguration : IEntityTypeConfiguration<SupplierRe
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).UseIdentityAlwaysColumn();
-        builder.Property(x => x.SupplierId).IsRequired();
-        builder.Property(x => x.RetailerId).IsRequired();
         builder.Property(x => x.StartDate).IsRequired();
         builder.Property(x => x.EndDate);
 

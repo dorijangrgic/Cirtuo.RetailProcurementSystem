@@ -12,10 +12,7 @@ public class RetailerConfiguration : IEntityTypeConfiguration<Retailer>
 
         builder.Property(x => x.Id).UseIdentityAlwaysColumn();
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
-        builder.Property(x => x.LocationId).IsRequired();
-        builder.Property(x => x.ContactId).IsRequired();
-        builder.Property(x => x.ManagerId).IsRequired();
-        
+
         builder.HasOne(x => x.Location).WithMany().HasForeignKey(x => x.LocationId);
         builder.HasOne(x => x.Contact).WithMany().HasForeignKey(x => x.ContactId);
         builder.HasOne(x => x.Manager).WithMany().HasForeignKey(x => x.ManagerId);

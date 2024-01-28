@@ -2,7 +2,7 @@ namespace Cirtuo.RetailProcurementSystem.Domain;
 
 public class OrderItem
 {
-    public int Id { get; }
+    public int Id { get; private set; }
     public int OrderId { get; private set; }
     public int SupplierStoreItemId { get; private set; }
     public int Quantity { get; private set; }
@@ -11,9 +11,10 @@ public class OrderItem
     public Order Order { get; private set; }
     public SupplierStoreItem SupplierStoreItem { get; private set; }
     
-    public OrderItem(int id, int orderId, int supplierStoreItemId, int quantity, decimal itemPrice)
+    public OrderItem() { }
+
+    public OrderItem(int orderId, int supplierStoreItemId, int quantity, decimal itemPrice)
     {
-        Id = id;
         OrderId = orderId;
         SupplierStoreItemId = supplierStoreItemId;
         Quantity = quantity;

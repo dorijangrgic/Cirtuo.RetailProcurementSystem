@@ -2,7 +2,7 @@ namespace Cirtuo.RetailProcurementSystem.Domain;
 
 public class Order
 {
-    public int Id { get; }
+    public int Id { get; private set; }
     public int RetailerId { get; private set; }
     public DateTime OrderDate { get; private set; }
     public DateTime? DeliveryDate { get; private set; }
@@ -11,9 +11,10 @@ public class Order
     
     public Retailer Retailer { get; private set; }
     public ICollection<OrderItem> OrderItems { get; private set; }
+    
+    public Order() { }
 
     public Order(
-        int id,
         int retailerId,
         DateTime orderDate,
         DateTime? deliveryDate,
@@ -21,7 +22,6 @@ public class Order
         decimal totalPrice
     )
     {
-        Id = id;
         RetailerId = retailerId;
         OrderDate = orderDate;
         DeliveryDate = deliveryDate;
@@ -29,5 +29,10 @@ public class Order
         TotalPrice = totalPrice;
         
         OrderItems ??= new List<OrderItem>();
+    }
+    
+    public void SetTotalPrice(decimal totalPrice)
+    {
+        TotalPrice = totalPrice;
     }
 }

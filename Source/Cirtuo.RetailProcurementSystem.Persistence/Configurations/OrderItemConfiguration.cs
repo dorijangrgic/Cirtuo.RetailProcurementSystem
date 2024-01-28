@@ -11,10 +11,8 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).UseIdentityAlwaysColumn();
-        builder.Property(x => x.OrderId).IsRequired();
-        builder.Property(x => x.SupplierStoreItemId).IsRequired();
         builder.Property(x => x.Quantity).IsRequired();
-        builder.Property(x => x.ItemPrice).IsRequired();
+        builder.Property(x => x.ItemPrice).IsRequired().HasPrecision(1000, 5);
 
         builder.HasOne(x => x.Order)
             .WithMany(x => x.OrderItems)

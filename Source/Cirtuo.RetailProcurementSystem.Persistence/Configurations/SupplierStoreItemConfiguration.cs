@@ -11,13 +11,11 @@ public class SupplierStoreItemConfiguration : IEntityTypeConfiguration<SupplierS
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).UseIdentityAlwaysColumn();
-        builder.Property(x => x.SupplierId).IsRequired();
-        builder.Property(x => x.StoreItemId).IsRequired();
         builder.Property(x => x.StartDate).IsRequired();
         builder.Property(x => x.EndDate).IsRequired();
         builder.Property(x => x.Quarter).IsRequired();
         builder.Property(x => x.Year).IsRequired();
-        builder.Property(x => x.ItemPrice).IsRequired();
+        builder.Property(x => x.ItemPrice).IsRequired().HasPrecision(1000, 5);
         builder.Property(x => x.SoldItems).IsRequired();
 
         builder.HasOne(x => x.Supplier)
