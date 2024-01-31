@@ -5,6 +5,10 @@ namespace Cirtuo.RetailProcurementSystem.Persistence.Seeders;
 
 public class DataSeeder
 {
+    private const int StartQuarter = 1;
+    private const int EndQuarter = 4;
+    private const int StartYear = 2022;
+    private const int EndYear = 2025;
     public IReadOnlyCollection<Location> Locations { get; }
     public IReadOnlyCollection<Contact> Contacts { get; }
     public IReadOnlyCollection<Manager> Managers { get; }
@@ -18,16 +22,16 @@ public class DataSeeder
 
     public DataSeeder()
     {
-        Locations = GenerateLocations(400);
-        Contacts = GenerateContacts(500);
-        Managers = GenerateManagers(800, Contacts.ToList());
-        Retailers = GenerateRetailers(500, Contacts.ToList(), Managers.ToList(), Locations.ToList());
-        Suppliers = GenerateSuppliers(400, Contacts.ToList(), Locations.ToList());
-        SuppliersRetailers = GenerateSuppliersRetailers(1500, Suppliers.ToList(), Retailers.ToList());
-        StoreItems = GenerateStoreItems(1000);
-        SupplierStoreItems = GenerateSupplierStoreItems(2000, Suppliers.ToList(), StoreItems.ToList());
-        Orders = GenerateOrders(3000, Retailers.ToList());
-        OrderItems = GenerateOrderItems(4000, Orders.ToList(), SupplierStoreItems.ToList());
+        Locations = GenerateLocations(50);
+        Contacts = GenerateContacts(50);
+        Managers = GenerateManagers(600, Contacts.ToList());
+        Retailers = GenerateRetailers(50, Contacts.ToList(), Managers.ToList(), Locations.ToList());
+        Suppliers = GenerateSuppliers(40, Contacts.ToList(), Locations.ToList());
+        SuppliersRetailers = GenerateSuppliersRetailers(500, Suppliers.ToList(), Retailers.ToList());
+        StoreItems = GenerateStoreItems(500);
+        SupplierStoreItems = GenerateSupplierStoreItems(1000, Suppliers.ToList(), StoreItems.ToList());
+        Orders = GenerateOrders(200, Retailers.ToList());
+        OrderItems = GenerateOrderItems(1000, Orders.ToList(), SupplierStoreItems.ToList());
     }
 
     private IReadOnlyCollection<Location> GenerateLocations(int amount)
@@ -111,13 +115,31 @@ public class DataSeeder
         List<Retailer> retailers
     )
     {
+        Func<DateTime> startDateRule = () =>
+        {
+            var quarter = new Faker().Random.Int(StartQuarter, EndQuarter);
+            var year = new Faker().Random.Int(StartYear, EndYear);
+            
+            var startMonth = quarter switch
+            {
+                1 => 1,
+                2 => 4,
+                3 => 7,
+                4 => 10,
+                _ => throw new ArgumentOutOfRangeException(nameof(quarter), quarter, null)
+            };
+            return new DateTime(year, startMonth, 1).ToUniversalTime();
+        };
+        
+        Func<DateTime, DateTime> endDateRule = startDate => startDate.AddMonths(3);
+        
         var id = 1;
         var supplierRetailerFaker = new Faker<SupplierRetailer>()
             .RuleFor(x => x.Id, f => id++)
             .RuleFor(x => x.SupplierId, f => f.Random.ListItem(suppliers).Id)
             .RuleFor(x => x.RetailerId, f => f.Random.ListItem(retailers).Id)
-            .RuleFor(x => x.StartDate, f => _dateRule(f, 1))
-            .RuleFor(x => x.EndDate, f => _optionalDateRule(f, 10));
+            .RuleFor(x => x.StartDate, _ => startDateRule())
+            .RuleFor(x => x.EndDate, (_, x) => endDateRule(x.StartDate));
 
         return supplierRetailerFaker.Generate(amount);
     }

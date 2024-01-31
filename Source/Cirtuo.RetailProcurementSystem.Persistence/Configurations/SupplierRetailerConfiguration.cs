@@ -12,7 +12,7 @@ public class SupplierRetailerConfiguration : IEntityTypeConfiguration<SupplierRe
 
         builder.Property(x => x.Id).UseIdentityAlwaysColumn();
         builder.Property(x => x.StartDate).IsRequired();
-        builder.Property(x => x.EndDate);
+        builder.Property(x => x.EndDate).IsRequired();
 
         builder.HasOne(x => x.Supplier)
             .WithMany(x => x.SupplierRetailers)
