@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Cirtuo.RetailProcurementSystem.Application;
 using Cirtuo.RetailProcurementSystem.Persistence;
 
@@ -7,6 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        var enumConverter = new JsonStringEnumConverter();
+        opts.JsonSerializerOptions.Converters.Add(enumConverter);
+    });
 
 builder.Services
     .AddApplicationLayer()
@@ -22,5 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();

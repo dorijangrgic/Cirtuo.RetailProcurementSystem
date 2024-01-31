@@ -1,0 +1,53 @@
+using Cirtuo.RetailProcurementSystem.Application.Suppliers;
+using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
+using Cirtuo.RetailProcurementSystem.Application.Suppliers.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Cirtuo.RetailProcurementSystem.Api.Controllers;
+
+[ApiController]
+[Route("api/suppliers")]
+public class SuppliersController : ControllerBase
+{
+    private readonly ISupplierService _supplierService;
+
+    public SuppliersController(ISupplierService supplierService)
+    {
+        _supplierService = supplierService;
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetSuppliers()
+    {
+        var suppliers = await _supplierService.GetSuppliersAsync();
+        return Ok(suppliers);
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetSupplierDetails(int id)
+    {
+        var supplier = await _supplierService.GetSupplierAsync(id);
+        return Ok(supplier);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateSupplier(SupplierDto supplierDto)
+    {
+        var id = await _supplierService.CreateSupplierAsync(supplierDto);
+        return Created($"suppliers/{id}", null);
+    }
+    
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateSupplier(int id, SupplierDto supplierDto)
+    {
+        await _supplierService.UpdateSupplierAsync(id, supplierDto);
+        return NoContent();
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteSupplier(int id)
+    {
+        await _supplierService.DeleteSupplierAsync(id);
+        return NoContent();
+    }
+}

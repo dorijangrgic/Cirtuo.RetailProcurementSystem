@@ -23,4 +23,11 @@ public class Supplier
         SupplierRetailers ??= new List<SupplierRetailer>();
         SupplierStoreItems ??= new List<SupplierStoreItem>();
     }
+    
+    public void Update(string name, int locationId, int contactId)
+    {
+        Name = name;
+        LocationId = locationId;
+        ContactId = contactId;
+    }
 }

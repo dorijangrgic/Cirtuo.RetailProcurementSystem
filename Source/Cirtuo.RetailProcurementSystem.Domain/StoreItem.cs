@@ -26,4 +26,12 @@ public class StoreItem
         
         SupplierStoreItems ??= new List<SupplierStoreItem>();
     }
+    
+    public void Update(string sku, string name, string description, StoreItemCategory category)
+    {
+        Sku = sku;
+        Name = name;
+        Description = description;
+        Category = category;
+    }
 }
