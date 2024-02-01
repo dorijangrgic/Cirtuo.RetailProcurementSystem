@@ -1,7 +1,6 @@
-using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
 
-namespace Cirtuo.RetailProcurementSystem.Application.Common;
+namespace Cirtuo.RetailProcurementSystem.Application.Common.Models;
 
 public class OrderItemDto
 {

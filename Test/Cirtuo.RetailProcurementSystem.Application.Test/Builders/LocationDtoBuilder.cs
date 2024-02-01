@@ -1,4 +1,5 @@
 using Cirtuo.RetailProcurementSystem.Application.Common;
+using Cirtuo.RetailProcurementSystem.Application.Common.Models;
 
 namespace Cirtuo.RetailProcurementSystem.Application.Test.Builders;
 

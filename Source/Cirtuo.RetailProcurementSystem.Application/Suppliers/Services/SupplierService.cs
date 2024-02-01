@@ -1,4 +1,5 @@
 using Cirtuo.RetailProcurementSystem.Application.Common;
+using Cirtuo.RetailProcurementSystem.Application.Common.Models;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Specifications;
 using Cirtuo.RetailProcurementSystem.Domain;
@@ -30,7 +31,7 @@ public class SupplierService : ISupplierService
     {
         var getSupplierSpec = new GetSupplierSpec(id);
         var supplier = await _supplierRepository.FirstOrDefaultAsync(getSupplierSpec);
-        if (supplier is null) throw new ApplicationException($"Supplier with id {id} does not exist.");
+        if (supplier is null) throw new NotFoundException($"Supplier with id {id} does not exist.");
         var location = new LocationDto(supplier.Location.Id, supplier.Location.Address, supplier.Location.City, supplier.Location.State, supplier.Location.ZipCode);
         var contact = new ContactDto(supplier.Contact.Id, supplier.Contact.Email, supplier.Contact.Phone);
         return new SupplierDto(supplier.Id, supplier.Name, location, contact);
@@ -47,7 +48,7 @@ public class SupplierService : ISupplierService
     public async Task UpdateSupplierAsync(int id, SupplierDto supplierDto)
     {
         var supplier = await _supplierRepository.GetByIdAsync(id);
-        if (supplier is null) throw new ApplicationException($"Supplier with id {id} does not exist.");
+        if (supplier is null) throw new NotFoundException($"Supplier with id {id} does not exist.");
         supplier.Update(supplierDto.Name, supplierDto.Location.Id, supplierDto.Contact.Id);
         await _supplierRepository.UpdateAsync(supplier);
         await _supplierRepository.SaveChangesAsync();
@@ -56,7 +57,7 @@ public class SupplierService : ISupplierService
     public async Task DeleteSupplierAsync(int id)
     {
         var supplier = await _supplierRepository.GetByIdAsync(id);
-        if (supplier is null) throw new ApplicationException($"Supplier with id {id} does not exist.");
+        if (supplier is null) throw new NotFoundException($"Supplier with id {id} does not exist.");
         await _supplierRepository.DeleteAsync(supplier);
         await _supplierRepository.SaveChangesAsync();
     }

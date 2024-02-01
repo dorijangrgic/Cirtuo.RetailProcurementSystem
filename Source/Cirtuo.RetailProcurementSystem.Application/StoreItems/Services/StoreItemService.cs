@@ -1,3 +1,4 @@
+using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Domain;
@@ -29,7 +30,7 @@ public class StoreItemService : IStoreItemService
     {
         var storeItem = await _storeItemRepository.GetByIdAsync(id);
         
-        if (storeItem == null) throw new ApplicationException($"Store item with id {id} does not exist.");
+        if (storeItem == null) throw new NotFoundException($"Store item with id {id} does not exist.");
 
         return new StoreItemDto(
             storeItem.Id,
@@ -56,7 +57,7 @@ public class StoreItemService : IStoreItemService
     public async Task UpdateStoreItemAsync(int id, StoreItemDto storeItemDto)
     {
         var storeItem = await _storeItemRepository.GetByIdAsync(id);
-        if (storeItem is null) throw new ApplicationException($"Store item with id {id} does not exist.");
+        if (storeItem is null) throw new NotFoundException($"Store item with id {id} does not exist.");
         
         storeItem.Update(storeItemDto.Sku, storeItemDto.Name, storeItemDto.Description, (StoreItemCategory)storeItemDto.Category);
         await _storeItemRepository.UpdateAsync(storeItem);
@@ -66,7 +67,7 @@ public class StoreItemService : IStoreItemService
     public async Task DeleteStoreItemAsync(int id)
     {
         var storeItem = await _storeItemRepository.GetByIdAsync(id);
-        if (storeItem is null) throw new ApplicationException($"Store item with id {id} does not exist.");
+        if (storeItem is null) throw new NotFoundException($"Store item with id {id} does not exist.");
         
         await _storeItemRepository.DeleteAsync(storeItem);
         await _storeItemRepository.SaveChangesAsync();

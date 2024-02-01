@@ -1,3 +1,4 @@
+using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.Common.Services;
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Services;
 using Cirtuo.RetailProcurementSystem.Application.Test.Builders;
@@ -21,7 +22,7 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
     }
     
     [Fact]
-    public async Task AddSuppliersForUpcomingQuarterAsync_RetailerMissing_ThrowsApplicationException()
+    public async Task AddSuppliersForUpcomingQuarterAsync_RetailerMissing_ThrowsNotFoundException()
     {
         // Arrange
         var connectSupplierRetailerRequest = ConnectSupplierRetailerRequestBuilder.Default()
@@ -32,11 +33,11 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
         Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest);
         
         // Assert
-        await action.Should().ThrowAsync<ApplicationException>();
+        await action.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]
-    public async Task AddSuppliersForUpcomingQuarterAsync_SupplierMissing_ThrowsApplicationException()
+    public async Task AddSuppliersForUpcomingQuarterAsync_SupplierMissing_ThrowsNotFoundException()
     {
         // Arrange
         var supplierIds = new List<int> { 10_000 };
@@ -48,7 +49,7 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
         Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest);
         
         // Assert
-        await action.Should().ThrowAsync<ApplicationException>();
+        await action.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]

@@ -1,3 +1,4 @@
+using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Service;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Services;
 using Cirtuo.RetailProcurementSystem.Application.Test.Builders;
@@ -47,7 +48,7 @@ public class SupplierStoreItemServiceTests : IntegrationTestFixture
     }
     
     [Fact]
-    public async Task ConnectSupplierStoreItemAsync_SupplierMissing_ThrowsApplicationException()
+    public async Task ConnectSupplierStoreItemAsync_SupplierMissing_ThrowsNotFoundException()
     {
         // Arrange
         var supplierStoreItemDto = SupplierStoreItemDtoBuilder.Default()
@@ -58,11 +59,11 @@ public class SupplierStoreItemServiceTests : IntegrationTestFixture
         Func<Task> act = async () => await _supplierStoreItemService.ConnectSupplierStoreItemAsync(supplierStoreItemDto);
         
         // Assert
-        await act.Should().ThrowAsync<ApplicationException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]
-    public async Task ConnectSupplierStoreItemAsync_StoreItemMissing_ThrowsApplicationException()
+    public async Task ConnectSupplierStoreItemAsync_StoreItemMissing_ThrowsNotFoundException()
     {
         // Arrange
         var supplierStoreItemDto = SupplierStoreItemDtoBuilder.Default()
@@ -73,7 +74,7 @@ public class SupplierStoreItemServiceTests : IntegrationTestFixture
         Func<Task> act = async () => await _supplierStoreItemService.ConnectSupplierStoreItemAsync(supplierStoreItemDto);
         
         // Assert
-        await act.Should().ThrowAsync<ApplicationException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 
     [Fact]

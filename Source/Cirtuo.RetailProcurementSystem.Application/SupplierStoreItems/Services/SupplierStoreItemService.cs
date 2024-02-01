@@ -1,4 +1,5 @@
 using Cirtuo.RetailProcurementSystem.Application.Common;
+using Cirtuo.RetailProcurementSystem.Application.Common.Models;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
@@ -43,10 +44,10 @@ public class SupplierStoreItemService : ISupplierStoreItemService
     public async Task<int> ConnectSupplierStoreItemAsync(SupplierStoreItemDto supplierStoreItemDto)
     {
         var supplier = await _supplierRepository.GetByIdAsync(supplierStoreItemDto.Supplier.Id);
-        if (supplier is null) throw new ApplicationException($"Supplier with id {supplierStoreItemDto.Supplier.Id} does not exist");
+        if (supplier is null) throw new NotFoundException($"Supplier with id {supplierStoreItemDto.Supplier.Id} does not exist");
         
         var storeItem = await _storeItemRepository.GetByIdAsync(supplierStoreItemDto.StoreItem.Id);
-        if (storeItem is null) throw new ApplicationException($"Store item with id {supplierStoreItemDto.StoreItem.Id} does not exist");
+        if (storeItem is null) throw new NotFoundException($"Store item with id {supplierStoreItemDto.StoreItem.Id} does not exist");
 
         var getSupplierStoreItemSpec = new GetSupplierStoreItemForConnectionSpec(
             supplierStoreItemDto.Supplier.Id,
@@ -90,7 +91,7 @@ public class SupplierStoreItemService : ISupplierStoreItemService
     {
         var getSupplierSpec = new GetSupplierWithStoreItemsSpec(id);
         var supplier = await _supplierRepository.FirstOrDefaultAsync(getSupplierSpec);
-        if (supplier is null) throw new ApplicationException($"Supplier with id {id} does not exist");
+        if (supplier is null) throw new NotFoundException($"Supplier with id {id} does not exist");
         
         var soldItemsCount = supplier.SupplierStoreItems.Sum(x => x.SoldItems);
         return soldItemsCount;

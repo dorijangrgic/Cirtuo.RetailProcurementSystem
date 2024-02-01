@@ -1,6 +1,6 @@
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Models;
 
-namespace Cirtuo.RetailProcurementSystem.Application.Common;
+namespace Cirtuo.RetailProcurementSystem.Application.Common.Models;
 
 public class RetailerDto
 {

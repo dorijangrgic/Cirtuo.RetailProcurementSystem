@@ -1,3 +1,4 @@
+using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Services;
 using Cirtuo.RetailProcurementSystem.Application.Test.Builders;
 using Cirtuo.RetailProcurementSystem.Domain;
@@ -42,7 +43,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
     }
     
     [Fact]
-    public async Task GetSupplierAsync_SupplierMissing_ThrowsApplicationException()
+    public async Task GetSupplierAsync_SupplierMissing_ThrowsNotFoundException()
     {
         // Arrange
         const int id = 0;
@@ -51,7 +52,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         Func<Task> act = async () => await _supplierService.GetSupplierAsync(id);
         
         // Assert
-        await act.Should().ThrowAsync<ApplicationException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 
     [Fact]
@@ -92,7 +93,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
     }
     
     [Fact]
-    public async Task UpdateSupplierAsync_SupplierMissing_ThrowsApplicationException()
+    public async Task UpdateSupplierAsync_SupplierMissing_ThrowsNotFoundException()
     {
         // Arrange
         const int id = 0;
@@ -102,7 +103,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         Func<Task> act = async () => await _supplierService.UpdateSupplierAsync(id, supplierDto);
         
         // Assert
-        await act.Should().ThrowAsync<ApplicationException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]
@@ -116,11 +117,11 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         
         // Assert
         Func<Task> act = async () => await _supplierService.GetSupplierAsync(id);
-        await act.Should().ThrowAsync<ApplicationException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]
-    public async Task DeleteSupplierAsync_SupplierMissing_ThrowsApplicationException()
+    public async Task DeleteSupplierAsync_SupplierMissing_ThrowsNotFoundException()
     {
         // Arrange
         const int id = 10_000;
@@ -129,6 +130,6 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         Func<Task> act = async () => await _supplierService.DeleteSupplierAsync(id);
         
         // Assert
-        await act.Should().ThrowAsync<ApplicationException>();
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 }

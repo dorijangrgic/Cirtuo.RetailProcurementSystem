@@ -1,4 +1,4 @@
-namespace Cirtuo.RetailProcurementSystem.Application.Common;
+namespace Cirtuo.RetailProcurementSystem.Application.Common.Models;
 
 public class ManagerDto
 {

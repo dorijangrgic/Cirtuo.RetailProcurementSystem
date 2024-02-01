@@ -1,3 +1,4 @@
+using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Services;
 using Cirtuo.RetailProcurementSystem.Application.Test.Builders;
@@ -44,7 +45,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
     }
     
     [Fact]
-    public async Task GetStoreItemAsync_StoreItemMissing_ThrowsApplicationException()
+    public async Task GetStoreItemAsync_StoreItemMissing_ThrowsNotFoundException()
     {
         // Arrange
         const int storeItemId = 10_000;
@@ -53,7 +54,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         Func<Task<StoreItemDto>> action = async () => await _storeItemService.GetStoreItemAsync(storeItemId);
         
         // Assert
-        await action.Should().ThrowAsync<ApplicationException>();
+        await action.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]
@@ -88,7 +89,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
     }
     
     [Fact]
-    public async Task UpdateStoreItemAsync_StoreItemMissing_ThrowsApplicationException()
+    public async Task UpdateStoreItemAsync_StoreItemMissing_ThrowsNotFoundException()
     {
         // Arrange
         const int storeItemId = 1;
@@ -98,7 +99,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         Func<Task> action = async () => await _storeItemService.UpdateStoreItemAsync(10_000, updatedStoreItemDto);
         
         // Assert
-        await action.Should().ThrowAsync<ApplicationException>();
+        await action.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]
@@ -112,11 +113,11 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         
         // Assert
         Func<Task<StoreItemDto>> action = async () => await _storeItemService.GetStoreItemAsync(storeItemId);
-        await action.Should().ThrowAsync<ApplicationException>();
+        await action.Should().ThrowAsync<NotFoundException>();
     }
     
     [Fact]
-    public async Task DeleteStoreItemAsync_StoreItemMissing_ThrowsApplicationException()
+    public async Task DeleteStoreItemAsync_StoreItemMissing_ThrowsNotFoundException()
     {
         // Arrange
         const int storeItemId = 10_000;
@@ -125,6 +126,6 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         Func<Task> action = async () => await _storeItemService.DeleteStoreItemAsync(storeItemId);
         
         // Assert
-        await action.Should().ThrowAsync<ApplicationException>();
+        await action.Should().ThrowAsync<NotFoundException>();
     }
 }

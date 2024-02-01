@@ -1,4 +1,5 @@
 using Cirtuo.RetailProcurementSystem.Application.Common;
+using Cirtuo.RetailProcurementSystem.Application.Common.Models;
 using Cirtuo.RetailProcurementSystem.Application.Common.Services;
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Specifications;
@@ -30,7 +31,7 @@ public class SupplierRetailerService : ISupplierRetailerService
     public async Task AddSuppliersForUpcomingQuarterAsync(ConnectSupplierRetailerRequest connectSupplierRetailerRequest)
     {
         var retailer = await _retailerRepository.GetByIdAsync(connectSupplierRetailerRequest.RetailerId);
-        if (retailer is null) throw new ApplicationException($"Retailer with id {connectSupplierRetailerRequest.RetailerId} does not exist");
+        if (retailer is null) throw new NotFoundException($"Retailer with id {connectSupplierRetailerRequest.RetailerId} does not exist");
 
         var upcomingQuarter = _dateTimeService.CurrentQuarterYear.Next();
 
@@ -38,7 +39,7 @@ public class SupplierRetailerService : ISupplierRetailerService
         foreach (var supplierId in connectSupplierRetailerRequest.SupplierIds)
         {
             var supplier = await _supplierRepository.GetByIdAsync(supplierId);
-            if (supplier is null) throw new ApplicationException($"Supplier with id {supplierId} does not exist");
+            if (supplier is null) throw new NotFoundException($"Supplier with id {supplierId} does not exist");
             
             var supplierRetailer = await _supplierRetailerRepository.FirstOrDefaultAsync(new GetSupplierRetailerSpec(supplierId, retailer.Id));
             if (supplierRetailer is not null)
