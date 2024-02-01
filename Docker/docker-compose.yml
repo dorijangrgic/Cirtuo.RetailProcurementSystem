@@ -4,8 +4,8 @@ services:
   cirtuo-rps-api:
     image: cirtuo-rps-api:v1.0.0
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: Docker/Dockerfile
     ports:
       - 5000:8080
     depends_on:
@@ -15,6 +15,7 @@ services:
       
   cirtuo-rps-db:
     image: postgres:15.1
+    container_name: cirtuo-rps
     ports:
       - 5432:5432
     environment:
