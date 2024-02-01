@@ -5,6 +5,6 @@ namespace Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Services;
 
 public interface ISupplierRetailerService
 {
-    Task AddSuppliersForUpcomingQuarterAsync(ConnectSupplierRetailerRequest connectSupplierRetailerRequest);
-    Task<IEnumerable<SupplierDto>> GetSuppliersForCurrentQuarterAsync();
+    Task AddSuppliersForUpcomingQuarterAsync(ConnectSupplierRetailerRequest connectSupplierRetailerRequest, CancellationToken cancellationToken);
+    Task<IEnumerable<SupplierDto>> GetSuppliersForCurrentQuarterAsync(CancellationToken cancellationToken);
 }

@@ -28,9 +28,9 @@ public class SupplierRetailerService : ISupplierRetailerService
         _dateTimeService = dateTimeService;
     }
 
-    public async Task AddSuppliersForUpcomingQuarterAsync(ConnectSupplierRetailerRequest connectSupplierRetailerRequest)
+    public async Task AddSuppliersForUpcomingQuarterAsync(ConnectSupplierRetailerRequest connectSupplierRetailerRequest, CancellationToken cancellationToken)
     {
-        var retailer = await _retailerRepository.GetByIdAsync(connectSupplierRetailerRequest.RetailerId);
+        var retailer = await _retailerRepository.GetByIdAsync(connectSupplierRetailerRequest.RetailerId, cancellationToken);
         if (retailer is null) throw new NotFoundException($"Retailer with id {connectSupplierRetailerRequest.RetailerId} does not exist");
 
         var upcomingQuarter = _dateTimeService.CurrentQuarterYear.Next();
@@ -38,10 +38,10 @@ public class SupplierRetailerService : ISupplierRetailerService
         var supplierRetailers = new List<SupplierRetailer>();
         foreach (var supplierId in connectSupplierRetailerRequest.SupplierIds)
         {
-            var supplier = await _supplierRepository.GetByIdAsync(supplierId);
+            var supplier = await _supplierRepository.GetByIdAsync(supplierId, cancellationToken);
             if (supplier is null) throw new NotFoundException($"Supplier with id {supplierId} does not exist");
             
-            var supplierRetailer = await _supplierRetailerRepository.FirstOrDefaultAsync(new GetSupplierRetailerSpec(supplierId, retailer.Id));
+            var supplierRetailer = await _supplierRetailerRepository.FirstOrDefaultAsync(new GetSupplierRetailerSpec(supplierId, retailer.Id), cancellationToken);
             if (supplierRetailer is not null)
             {
                 var supplierRetailerEndDateQuarter = _dateTimeService.QuarterYearFrom(supplierRetailer.EndDate);
@@ -55,15 +55,15 @@ public class SupplierRetailerService : ISupplierRetailerService
             }
         }
         
-        await _supplierRetailerRepository.AddRangeAsync(supplierRetailers);
-        await _supplierRetailerRepository.SaveChangesAsync();
+        await _supplierRetailerRepository.AddRangeAsync(supplierRetailers, cancellationToken);
+        await _supplierRetailerRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<SupplierDto>> GetSuppliersForCurrentQuarterAsync()
+    public async Task<IEnumerable<SupplierDto>> GetSuppliersForCurrentQuarterAsync(CancellationToken cancellationToken)
     {
         var currentQuarter = _dateTimeService.CurrentQuarterYear;
         var getSupplierRetailersForCurrentQuarterSpec = new GetSuppliersForCurrentQuarterSpec(currentQuarter.EndDate);
-        var supplierRetailers = await _supplierRetailerRepository.ListAsync(getSupplierRetailersForCurrentQuarterSpec);
+        var supplierRetailers = await _supplierRetailerRepository.ListAsync(getSupplierRetailersForCurrentQuarterSpec, cancellationToken);
         
         return supplierRetailers.Select(sr =>
         {

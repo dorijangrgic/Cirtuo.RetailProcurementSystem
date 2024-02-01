@@ -25,7 +25,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
     {
         // Arrange
         // Act
-        var storeItems = await _storeItemService.GetStoreItemsAsync();
+        var storeItems = await _storeItemService.GetStoreItemsAsync(default);
         
         // Assert
         storeItems.Should().NotBeEmpty();
@@ -38,7 +38,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         const int storeItemId = 1;
         
         // Act
-        var storeItem = await _storeItemService.GetStoreItemAsync(storeItemId);
+        var storeItem = await _storeItemService.GetStoreItemAsync(storeItemId, default);
         
         // Assert
         storeItem.Should().NotBeNull();
@@ -51,7 +51,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         const int storeItemId = 10_000;
         
         // Act
-        Func<Task<StoreItemDto>> action = async () => await _storeItemService.GetStoreItemAsync(storeItemId);
+        Func<Task<StoreItemDto>> action = async () => await _storeItemService.GetStoreItemAsync(storeItemId, default);
         
         // Assert
         await action.Should().ThrowAsync<NotFoundException>();
@@ -64,10 +64,10 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         var storeItemDto = StoreItemDtoBuilder.Default().Build();
         
         // Act
-        var storeItemId = await _storeItemService.CreateStoreItemAsync(storeItemDto);
+        var storeItemId = await _storeItemService.CreateStoreItemAsync(storeItemDto, default);
         
         // Assert
-        var storeItem = await _storeItemService.GetStoreItemAsync(storeItemId);
+        var storeItem = await _storeItemService.GetStoreItemAsync(storeItemId, default);
         storeItem.Should().NotBeNull();
         storeItem.Should().BeEquivalentTo(storeItemDto, options => options.Excluding(x => x.Id));
     }
@@ -80,10 +80,10 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         var updatedStoreItemDto = StoreItemDtoBuilder.Default().WithId(storeItemId).WithName("Updated Store Item").Build();
         
         // Act
-        await _storeItemService.UpdateStoreItemAsync(storeItemId, updatedStoreItemDto);
+        await _storeItemService.UpdateStoreItemAsync(storeItemId, updatedStoreItemDto, default);
         
         // Assert
-        var storeItem = await _storeItemService.GetStoreItemAsync(storeItemId);
+        var storeItem = await _storeItemService.GetStoreItemAsync(storeItemId, default);
         storeItem.Should().NotBeNull();
         storeItem.Should().BeEquivalentTo(updatedStoreItemDto, options => options.Excluding(x => x.Id));
     }
@@ -96,7 +96,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         var updatedStoreItemDto = StoreItemDtoBuilder.Default().WithId(storeItemId).WithName("Updated Store Item").Build();
         
         // Act
-        Func<Task> action = async () => await _storeItemService.UpdateStoreItemAsync(10_000, updatedStoreItemDto);
+        Func<Task> action = async () => await _storeItemService.UpdateStoreItemAsync(10_000, updatedStoreItemDto, default);
         
         // Assert
         await action.Should().ThrowAsync<NotFoundException>();
@@ -109,10 +109,10 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         const int storeItemId = 2;
         
         // Act
-        await _storeItemService.DeleteStoreItemAsync(storeItemId);
+        await _storeItemService.DeleteStoreItemAsync(storeItemId, default);
         
         // Assert
-        Func<Task<StoreItemDto>> action = async () => await _storeItemService.GetStoreItemAsync(storeItemId);
+        Func<Task<StoreItemDto>> action = async () => await _storeItemService.GetStoreItemAsync(storeItemId, default);
         await action.Should().ThrowAsync<NotFoundException>();
     }
     
@@ -123,7 +123,7 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
         const int storeItemId = 10_000;
         
         // Act
-        Func<Task> action = async () => await _storeItemService.DeleteStoreItemAsync(storeItemId);
+        Func<Task> action = async () => await _storeItemService.DeleteStoreItemAsync(storeItemId, default);
         
         // Assert
         await action.Should().ThrowAsync<NotFoundException>();

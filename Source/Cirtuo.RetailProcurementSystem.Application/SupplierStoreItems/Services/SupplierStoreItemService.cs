@@ -4,7 +4,6 @@ using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
-using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Service;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Domain;
 
@@ -27,10 +26,10 @@ public class SupplierStoreItemService : ISupplierStoreItemService
         _storeItemRepository = storeItemRepository;
     }
 
-    public async Task<IEnumerable<SupplierStoreItemDto>> GetSupplierStoreItemsAsync()
+    public async Task<IEnumerable<SupplierStoreItemDto>> GetSupplierStoreItemsAsync(CancellationToken cancellationToken)
     {
         var getAllSupplierStoreItemSpec = new GetAllSupplierStoreItemSpec();
-        var supplierStoreItems = await _supplierStoreItemRepository.ListAsync(getAllSupplierStoreItemSpec);
+        var supplierStoreItems = await _supplierStoreItemRepository.ListAsync(getAllSupplierStoreItemSpec, cancellationToken);
         return supplierStoreItems.Select(x =>
         {
             var locationDto = new LocationDto(x.Supplier.Location.Id, x.Supplier.Location.Address, x.Supplier.Location.City, x.Supplier.Location.State, x.Supplier.Location.ZipCode);
@@ -41,12 +40,12 @@ public class SupplierStoreItemService : ISupplierStoreItemService
         });
     }
 
-    public async Task<int> ConnectSupplierStoreItemAsync(SupplierStoreItemDto supplierStoreItemDto)
+    public async Task<int> ConnectSupplierStoreItemAsync(SupplierStoreItemDto supplierStoreItemDto, CancellationToken cancellationToken)
     {
-        var supplier = await _supplierRepository.GetByIdAsync(supplierStoreItemDto.Supplier.Id);
+        var supplier = await _supplierRepository.GetByIdAsync(supplierStoreItemDto.Supplier.Id, cancellationToken);
         if (supplier is null) throw new NotFoundException($"Supplier with id {supplierStoreItemDto.Supplier.Id} does not exist");
         
-        var storeItem = await _storeItemRepository.GetByIdAsync(supplierStoreItemDto.StoreItem.Id);
+        var storeItem = await _storeItemRepository.GetByIdAsync(supplierStoreItemDto.StoreItem.Id, cancellationToken);
         if (storeItem is null) throw new NotFoundException($"Store item with id {supplierStoreItemDto.StoreItem.Id} does not exist");
 
         var getSupplierStoreItemSpec = new GetSupplierStoreItemForConnectionSpec(
@@ -55,7 +54,7 @@ public class SupplierStoreItemService : ISupplierStoreItemService
             supplierStoreItemDto.Quarter,
             supplierStoreItemDto.Year
         );
-        var supplierStoreItem = await _supplierStoreItemRepository.FirstOrDefaultAsync(getSupplierStoreItemSpec);
+        var supplierStoreItem = await _supplierStoreItemRepository.FirstOrDefaultAsync(getSupplierStoreItemSpec, cancellationToken);
         if (supplierStoreItem is not null)
         {
             throw new ApplicationException($"Supplier {supplierStoreItemDto.Supplier.Id} already has store item with id {supplierStoreItemDto.StoreItem.Id}");
@@ -72,35 +71,35 @@ public class SupplierStoreItemService : ISupplierStoreItemService
             supplierStoreItemDto.SoldItems
         );
         
-        await _supplierStoreItemRepository.AddAsync(supplierStoreItem);
-        await _supplierStoreItemRepository.SaveChangesAsync();
+        await _supplierStoreItemRepository.AddAsync(supplierStoreItem, cancellationToken);
+        await _supplierStoreItemRepository.SaveChangesAsync(cancellationToken);
         return supplierStoreItem.Id;
     }
 
-    public async Task DisconnectSupplierStoreItemAsync(int supplierId, int storeItemId)
+    public async Task DisconnectSupplierStoreItemAsync(int supplierId, int storeItemId, CancellationToken cancellationToken)
     {
         var getSupplierStoreItemSpec = new GetSupplierStoreItemSpec(supplierId, storeItemId);
-        var supplierStoreItem = await _supplierStoreItemRepository.FirstOrDefaultAsync(getSupplierStoreItemSpec);
+        var supplierStoreItem = await _supplierStoreItemRepository.FirstOrDefaultAsync(getSupplierStoreItemSpec, cancellationToken);
         if (supplierStoreItem is null) throw new ApplicationException($"Supplier {supplierId} does not have store item with id {storeItemId}");
         
-        await _supplierStoreItemRepository.DeleteAsync(supplierStoreItem);
-        await _supplierStoreItemRepository.SaveChangesAsync();
+        await _supplierStoreItemRepository.DeleteAsync(supplierStoreItem, cancellationToken);
+        await _supplierStoreItemRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<int> GetSoldItemsCountAsync(int id)
+    public async Task<int> GetSoldItemsCountAsync(int id, CancellationToken cancellationToken)
     {
         var getSupplierSpec = new GetSupplierWithStoreItemsSpec(id);
-        var supplier = await _supplierRepository.FirstOrDefaultAsync(getSupplierSpec);
+        var supplier = await _supplierRepository.FirstOrDefaultAsync(getSupplierSpec, cancellationToken);
         if (supplier is null) throw new NotFoundException($"Supplier with id {id} does not exist");
         
         var soldItemsCount = supplier.SupplierStoreItems.Sum(x => x.SoldItems);
         return soldItemsCount;
     }
 
-    public async Task<SupplierStoreItemDto> GetLowestItemPriceForProductAsync(int productId)
+    public async Task<SupplierStoreItemDto> GetLowestItemPriceForProductAsync(int productId, CancellationToken cancellationToken)
     {
         var getSupplierStoreItemSpec = new GetSupplierStoreItemsByStoreItemIdSpec(productId);
-        var supplierStoreItems = await _supplierStoreItemRepository.ListAsync(getSupplierStoreItemSpec);
+        var supplierStoreItems = await _supplierStoreItemRepository.ListAsync(getSupplierStoreItemSpec, cancellationToken);
         var supplierStoreItem = supplierStoreItems.FirstOrDefault();
         if (supplierStoreItem is null) throw new ApplicationException($"Product with id {productId} is not available from any supplier");
 

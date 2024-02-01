@@ -23,7 +23,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
     {
         // Arrange
         // Act
-        var suppliers = await _supplierService.GetSuppliersAsync();
+        var suppliers = await _supplierService.GetSuppliersAsync(default);
         
         // Assert
         suppliers.Should().NotBeEmpty();
@@ -36,7 +36,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         const int id = 1;
         
         // Act
-        var supplier = await _supplierService.GetSupplierAsync(id);
+        var supplier = await _supplierService.GetSupplierAsync(id, default);
         
         // Assert
         supplier.Should().NotBeNull();
@@ -49,7 +49,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         const int id = 0;
         
         // Act
-        Func<Task> act = async () => await _supplierService.GetSupplierAsync(id);
+        Func<Task> act = async () => await _supplierService.GetSupplierAsync(id, default);
         
         // Assert
         await act.Should().ThrowAsync<NotFoundException>();
@@ -62,10 +62,10 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         var supplierDto = SupplierDtoBuilder.Default().Build();
         
         // Act
-        var id = await _supplierService.CreateSupplierAsync(supplierDto);
+        var id = await _supplierService.CreateSupplierAsync(supplierDto, default);
         
         // Assert
-        var supplier = await _supplierService.GetSupplierAsync(id);
+        var supplier = await _supplierService.GetSupplierAsync(id, default);
         supplier.Should().NotBeNull();
         supplier.Should().BeEquivalentTo(supplierDto, options =>
         {
@@ -81,10 +81,10 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         var supplierDto = SupplierDtoBuilder.Default().WithName("Updated supplier").Build();
         
         // Act
-        await _supplierService.UpdateSupplierAsync(id, supplierDto);
+        await _supplierService.UpdateSupplierAsync(id, supplierDto, default);
         
         // Assert
-        var supplier = await _supplierService.GetSupplierAsync(id);
+        var supplier = await _supplierService.GetSupplierAsync(id, default);
         supplier.Should().NotBeNull();
         supplier.Should().BeEquivalentTo(supplierDto, options =>
         {
@@ -100,7 +100,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         var supplierDto = SupplierDtoBuilder.Default().WithName("Updated supplier").Build();
         
         // Act
-        Func<Task> act = async () => await _supplierService.UpdateSupplierAsync(id, supplierDto);
+        Func<Task> act = async () => await _supplierService.UpdateSupplierAsync(id, supplierDto, default);
         
         // Assert
         await act.Should().ThrowAsync<NotFoundException>();
@@ -113,10 +113,10 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         const int id = 2;
         
         // Act
-        await _supplierService.DeleteSupplierAsync(id);
+        await _supplierService.DeleteSupplierAsync(id, default);
         
         // Assert
-        Func<Task> act = async () => await _supplierService.GetSupplierAsync(id);
+        Func<Task> act = async () => await _supplierService.GetSupplierAsync(id, default);
         await act.Should().ThrowAsync<NotFoundException>();
     }
     
@@ -127,7 +127,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
         const int id = 10_000;
         
         // Act
-        Func<Task> act = async () => await _supplierService.DeleteSupplierAsync(id);
+        Func<Task> act = async () => await _supplierService.DeleteSupplierAsync(id, default);
         
         // Assert
         await act.Should().ThrowAsync<NotFoundException>();

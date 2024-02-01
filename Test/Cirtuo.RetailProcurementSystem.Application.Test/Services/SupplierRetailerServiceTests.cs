@@ -30,7 +30,7 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
             .Build();
         
         // Act
-        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest);
+        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest, default);
         
         // Assert
         await action.Should().ThrowAsync<NotFoundException>();
@@ -46,7 +46,7 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
             .Build();
         
         // Act
-        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest);
+        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest, default);
         
         // Assert
         await action.Should().ThrowAsync<NotFoundException>();
@@ -62,10 +62,10 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
             .WithRetailerId(retailerId)
             .WithSupplierIds(supplierIds)
             .Build();
-        await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest);
+        await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest, default);
         
         // Act
-        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest);
+        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest, default);
         
         // Assert
         await action.Should().ThrowAsync<ApplicationException>();
@@ -83,7 +83,7 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
             .Build();
 
         // Act
-        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest);
+        Func<Task> action = async () => await _supplierRetailerService.AddSuppliersForUpcomingQuarterAsync(connectSupplierRetailerRequest, default);
         
         // Assert
         await action.Should().NotThrowAsync<ApplicationException>();
@@ -94,7 +94,7 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
     {
         // Arrange
         // Act
-        var suppliers = await _supplierRetailerService.GetSuppliersForCurrentQuarterAsync();
+        var suppliers = await _supplierRetailerService.GetSuppliersForCurrentQuarterAsync(default);
         
         // Assert
         suppliers.Should().NotBeEmpty();

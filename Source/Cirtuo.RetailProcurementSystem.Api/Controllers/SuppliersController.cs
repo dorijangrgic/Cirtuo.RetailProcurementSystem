@@ -1,4 +1,3 @@
-using Cirtuo.RetailProcurementSystem.Application.Suppliers;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,37 +16,37 @@ public class SuppliersController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetSuppliers()
+    public async Task<IActionResult> GetSuppliers(CancellationToken cancellationToken)
     {
-        var suppliers = await _supplierService.GetSuppliersAsync();
+        var suppliers = await _supplierService.GetSuppliersAsync(cancellationToken);
         return Ok(suppliers);
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetSupplierDetails(int id)
+    public async Task<IActionResult> GetSupplierDetails(int id, CancellationToken cancellationToken)
     {
-        var supplier = await _supplierService.GetSupplierAsync(id);
+        var supplier = await _supplierService.GetSupplierAsync(id, cancellationToken);
         return Ok(supplier);
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateSupplier(SupplierDto supplierDto)
+    public async Task<IActionResult> CreateSupplier(SupplierDto supplierDto, CancellationToken cancellationToken)
     {
-        var id = await _supplierService.CreateSupplierAsync(supplierDto);
+        var id = await _supplierService.CreateSupplierAsync(supplierDto, cancellationToken);
         return Created($"suppliers/{id}", null);
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateSupplier(int id, SupplierDto supplierDto)
+    public async Task<IActionResult> UpdateSupplier(int id, SupplierDto supplierDto, CancellationToken cancellationToken)
     {
-        await _supplierService.UpdateSupplierAsync(id, supplierDto);
+        await _supplierService.UpdateSupplierAsync(id, supplierDto, cancellationToken);
         return NoContent();
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteSupplier(int id)
+    public async Task<IActionResult> DeleteSupplier(int id, CancellationToken cancellationToken)
     {
-        await _supplierService.DeleteSupplierAsync(id);
+        await _supplierService.DeleteSupplierAsync(id, cancellationToken);
         return NoContent();
     }
 }

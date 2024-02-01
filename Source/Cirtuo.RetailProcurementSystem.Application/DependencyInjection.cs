@@ -2,7 +2,6 @@ using Cirtuo.RetailProcurementSystem.Application.Common.Services;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Services;
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Services;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Services;
-using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Service;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Services;
 using Microsoft.Extensions.DependencyInjection;
 
