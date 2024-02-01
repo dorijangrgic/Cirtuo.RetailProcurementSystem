@@ -8,7 +8,6 @@ public sealed class GetAllSupplierStoreItemSpec : Specification<SupplierStoreIte
     public GetAllSupplierStoreItemSpec()
     {
         Query
-            .Take(50)
             .Include(x => x.StoreItem)
             .Include(x => x.Supplier)
             .Include(x => x.Supplier.Contact)

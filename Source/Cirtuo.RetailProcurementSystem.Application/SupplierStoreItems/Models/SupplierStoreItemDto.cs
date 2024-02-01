@@ -1,6 +1,4 @@
-using Cirtuo.RetailProcurementSystem.Application.StoreItems;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
-using Cirtuo.RetailProcurementSystem.Application.Suppliers;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 
 namespace Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;

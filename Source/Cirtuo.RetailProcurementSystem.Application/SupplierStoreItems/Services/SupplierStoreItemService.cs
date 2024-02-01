@@ -1,14 +1,13 @@
 using Cirtuo.RetailProcurementSystem.Application.Common;
-using Cirtuo.RetailProcurementSystem.Application.StoreItems;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Specifications;
-using Cirtuo.RetailProcurementSystem.Application.Suppliers;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
+using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Service;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Domain;
 
-namespace Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Service;
+namespace Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Services;
 
 public class SupplierStoreItemService : ISupplierStoreItemService
 {
