@@ -1,3 +1,4 @@
+using AutoMapper;
 using Cirtuo.RetailProcurementSystem.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.PostgreSql;
@@ -8,9 +9,12 @@ public class IntegrationTestFixture : IAsyncDisposable
 {
     private readonly PostgreSqlContainer _container;
     public readonly DbContextOptions<RetailProcurementDbContext> DbContextOptions;
+    public readonly IMapper Mapper;
     
     public IntegrationTestFixture()
     {
+        Mapper = new MapperConfiguration(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly)).CreateMapper();
+        
         _container = new PostgreSqlBuilder().WithDatabase("cirtuo-rps-db").Build();
         _container.StartAsync().GetAwaiter().GetResult();
         

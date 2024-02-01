@@ -1,8 +1,5 @@
+using AutoMapper;
 using Cirtuo.RetailProcurementSystem.Application.Common;
-using Cirtuo.RetailProcurementSystem.Application.Common.Models;
-using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
-using Cirtuo.RetailProcurementSystem.Application.StoreItems.Specifications;
-using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Domain;
@@ -14,30 +11,27 @@ public class SupplierStoreItemService : ISupplierStoreItemService
     private readonly IGenericRepository<SupplierStoreItem> _supplierStoreItemRepository;
     private readonly IGenericRepository<Supplier> _supplierRepository;
     private readonly IGenericRepository<StoreItem> _storeItemRepository;
+    private readonly IMapper _mapper;
 
     public SupplierStoreItemService(
         IGenericRepository<SupplierStoreItem> supplierStoreItemRepository,
         IGenericRepository<Supplier> supplierRepository,
-        IGenericRepository<StoreItem> storeItemRepository
+        IGenericRepository<StoreItem> storeItemRepository,
+        IMapper mapper
     )
     {
         _supplierStoreItemRepository = supplierStoreItemRepository;
         _supplierRepository = supplierRepository;
         _storeItemRepository = storeItemRepository;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<SupplierStoreItemDto>> GetSupplierStoreItemsAsync(CancellationToken cancellationToken)
     {
         var getAllSupplierStoreItemSpec = new GetAllSupplierStoreItemSpec();
         var supplierStoreItems = await _supplierStoreItemRepository.ListAsync(getAllSupplierStoreItemSpec, cancellationToken);
-        return supplierStoreItems.Select(x =>
-        {
-            var locationDto = new LocationDto(x.Supplier.Location.Id, x.Supplier.Location.Address, x.Supplier.Location.City, x.Supplier.Location.State, x.Supplier.Location.ZipCode);
-            var contactDto = new ContactDto(x.Supplier.Contact.Id, x.Supplier.Contact.Email, x.Supplier.Contact.Phone);
-            var supplierDto = new SupplierDto(x.Supplier.Id, x.Supplier.Name, locationDto, contactDto);
-            var storeItemDto = new StoreItemDto(x.StoreItem.Id, x.StoreItem.Sku, x.StoreItem.Name, x.StoreItem.Description, (StoreItemCategoryDto)x.StoreItem.Category);
-            return new SupplierStoreItemDto(x.Id, x.StartDate, x.EndDate, x.Quarter, x.Year, x.ItemPrice, x.SoldItems, supplierDto, storeItemDto);
-        });
+        
+        return _mapper.Map<IEnumerable<SupplierStoreItemDto>>(supplierStoreItems);
     }
 
     public async Task<int> ConnectSupplierStoreItemAsync(SupplierStoreItemDto supplierStoreItemDto, CancellationToken cancellationToken)
@@ -103,10 +97,6 @@ public class SupplierStoreItemService : ISupplierStoreItemService
         var supplierStoreItem = supplierStoreItems.FirstOrDefault();
         if (supplierStoreItem is null) throw new ApplicationException($"Product with id {productId} is not available from any supplier");
 
-        var locationDto = new LocationDto(supplierStoreItem.Supplier.Location.Id, supplierStoreItem.Supplier.Location.Address, supplierStoreItem.Supplier.Location.City, supplierStoreItem.Supplier.Location.State, supplierStoreItem.Supplier.Location.ZipCode);
-        var contactDto = new ContactDto(supplierStoreItem.Supplier.Contact.Id, supplierStoreItem.Supplier.Contact.Email, supplierStoreItem.Supplier.Contact.Phone);
-        var supplierDto = new SupplierDto(supplierStoreItem.Supplier.Id, supplierStoreItem.Supplier.Name, locationDto, contactDto);
-        var storeItemDto = new StoreItemDto(supplierStoreItem.StoreItem.Id, supplierStoreItem.StoreItem.Sku, supplierStoreItem.StoreItem.Name, supplierStoreItem.StoreItem.Description, (StoreItemCategoryDto)supplierStoreItem.StoreItem.Category);
-        return new SupplierStoreItemDto(supplierStoreItem.Id, supplierStoreItem.StartDate, supplierStoreItem.EndDate, supplierStoreItem.Quarter, supplierStoreItem.Year, supplierStoreItem.ItemPrice, supplierStoreItem.SoldItems, supplierDto, storeItemDto);
+        return _mapper.Map<SupplierStoreItemDto>(supplierStoreItem);
     }
 }

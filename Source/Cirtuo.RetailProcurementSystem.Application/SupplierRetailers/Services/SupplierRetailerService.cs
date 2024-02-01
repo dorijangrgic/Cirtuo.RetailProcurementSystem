@@ -1,5 +1,5 @@
+using AutoMapper;
 using Cirtuo.RetailProcurementSystem.Application.Common;
-using Cirtuo.RetailProcurementSystem.Application.Common.Models;
 using Cirtuo.RetailProcurementSystem.Application.Common.Services;
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Specifications;
@@ -14,18 +14,21 @@ public class SupplierRetailerService : ISupplierRetailerService
     private readonly IGenericRepository<Retailer> _retailerRepository;
     private readonly IGenericRepository<SupplierRetailer> _supplierRetailerRepository;
     private readonly IDateTimeService _dateTimeService;
+    private readonly IMapper _mapper;
 
     public SupplierRetailerService(
         IGenericRepository<Retailer> retailerRepository,
         IGenericRepository<Supplier> supplierRepository,
         IGenericRepository<SupplierRetailer> supplierRetailerRepository,
-        IDateTimeService dateTimeService
+        IDateTimeService dateTimeService,
+        IMapper mapper
     )
     {
         _retailerRepository = retailerRepository;
         _supplierRepository = supplierRepository;
         _supplierRetailerRepository = supplierRetailerRepository;
         _dateTimeService = dateTimeService;
+        _mapper = mapper;
     }
 
     public async Task AddSuppliersForUpcomingQuarterAsync(ConnectSupplierRetailerRequest connectSupplierRetailerRequest, CancellationToken cancellationToken)
@@ -65,12 +68,6 @@ public class SupplierRetailerService : ISupplierRetailerService
         var getSupplierRetailersForCurrentQuarterSpec = new GetSuppliersForCurrentQuarterSpec(currentQuarter.EndDate);
         var supplierRetailers = await _supplierRetailerRepository.ListAsync(getSupplierRetailersForCurrentQuarterSpec, cancellationToken);
         
-        return supplierRetailers.Select(sr =>
-        {
-            var supplier = sr.Supplier;
-            var location = new LocationDto(supplier.Location.Id, supplier.Location.Address, supplier.Location.City, supplier.Location.State, supplier.Location.ZipCode);
-            var contact = new ContactDto(supplier.Contact.Id, supplier.Contact.Email, supplier.Contact.Phone);
-            return new SupplierDto(supplier.Id, supplier.Name, location, contact);
-        });
+        return _mapper.Map<IEnumerable<SupplierDto>>(supplierRetailers.Select(x => x.Supplier));
     }
 }

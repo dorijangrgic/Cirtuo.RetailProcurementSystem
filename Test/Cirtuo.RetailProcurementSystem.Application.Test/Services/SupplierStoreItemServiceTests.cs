@@ -15,10 +15,18 @@ public class SupplierStoreItemServiceTests : IntegrationTestFixture
     public SupplierStoreItemServiceTests()
     {
         var dbContext = new RetailProcurementDbContext(DbContextOptions);
+        
         _supplierStoreItemRepository = new GenericRepository<SupplierStoreItem>(dbContext);
+        
         var supplierRepository = new GenericRepository<Supplier>(dbContext);
         var storeItemRepository = new GenericRepository<StoreItem>(dbContext);
-        _supplierStoreItemService = new SupplierStoreItemService(_supplierStoreItemRepository, supplierRepository, storeItemRepository);
+        
+        _supplierStoreItemService = new SupplierStoreItemService(
+            _supplierStoreItemRepository,
+            supplierRepository,
+            storeItemRepository,
+            Mapper
+        );
     }
     
     [Fact]

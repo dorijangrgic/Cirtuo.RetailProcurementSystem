@@ -15,7 +15,7 @@ public class SupplierServiceTests : IClassFixture<IntegrationTestFixture>
     {
         var dbContext = new RetailProcurementDbContext(fixture.DbContextOptions);
         var supplierRepository = new GenericRepository<Supplier>(dbContext);
-        _supplierService = new SupplierService(supplierRepository);
+        _supplierService = new SupplierService(supplierRepository, fixture.Mapper);
     }
     
     [Fact]

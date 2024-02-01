@@ -1,6 +1,6 @@
+using AutoMapper;
 using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
-using Cirtuo.RetailProcurementSystem.Application.StoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Domain;
 
 namespace Cirtuo.RetailProcurementSystem.Application.StoreItems.Services;
@@ -8,22 +8,19 @@ namespace Cirtuo.RetailProcurementSystem.Application.StoreItems.Services;
 public class StoreItemService : IStoreItemService
 {
     private readonly IGenericRepository<StoreItem> _storeItemRepository;
+    private readonly IMapper _mapper;
 
-    public StoreItemService(IGenericRepository<StoreItem> storeItemRepository)
+    public StoreItemService(IGenericRepository<StoreItem> storeItemRepository, IMapper mapper)
     {
         _storeItemRepository = storeItemRepository;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<StoreItemDto>> GetStoreItemsAsync(CancellationToken cancellationToken)
     {
         var storeItems = await _storeItemRepository.ListAsync(cancellationToken);
-        return storeItems.Select(storeItem => new StoreItemDto(
-            storeItem.Id,
-            storeItem.Sku,
-            storeItem.Name,
-            storeItem.Description,
-            (StoreItemCategoryDto)storeItem.Category
-        ));
+        
+        return _mapper.Map<IEnumerable<StoreItemDto>>(storeItems);
     }
 
     public async Task<StoreItemDto> GetStoreItemAsync(int id, CancellationToken cancellationToken)
@@ -32,13 +29,7 @@ public class StoreItemService : IStoreItemService
         
         if (storeItem == null) throw new NotFoundException($"Store item with id {id} does not exist.");
 
-        return new StoreItemDto(
-            storeItem.Id,
-            storeItem.Sku,
-            storeItem.Name,
-            storeItem.Description,
-            (StoreItemCategoryDto)storeItem.Category
-        );
+        return _mapper.Map<StoreItemDto>(storeItem);
     }
 
     public async Task<int> CreateStoreItemAsync(StoreItemDto storeItemDto, CancellationToken cancellationToken)
@@ -49,6 +40,7 @@ public class StoreItemService : IStoreItemService
             storeItemDto.Description,
             (StoreItemCategory)storeItemDto.Category
         );
+        
         await _storeItemRepository.AddAsync(storeItem, cancellationToken);
         await _storeItemRepository.SaveChangesAsync(cancellationToken);
         return storeItem.Id;

@@ -15,9 +15,8 @@ public class StoreItemServiceTests : IClassFixture<IntegrationTestFixture>
     public StoreItemServiceTests(IntegrationTestFixture fixture)
     {
         var dbContext = new RetailProcurementDbContext(fixture.DbContextOptions);
-        
         var storeItemRepository = new GenericRepository<StoreItem>(dbContext);
-        _storeItemService = new StoreItemService(storeItemRepository);
+        _storeItemService = new StoreItemService(storeItemRepository, fixture.Mapper);
     }
     
     [Fact]

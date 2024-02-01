@@ -18,7 +18,13 @@ public class SupplierRetailerServiceTests : IntegrationTestFixture
         var supplierRetailerRepository = new GenericRepository<SupplierRetailer>(dbContext);
         var supplierRepository = new GenericRepository<Supplier>(dbContext);
         var retailerRepository = new GenericRepository<Retailer>(dbContext);
-        _supplierRetailerService = new SupplierRetailerService(retailerRepository, supplierRepository, supplierRetailerRepository, new DateTimeService());
+        
+        _supplierRetailerService = new SupplierRetailerService(
+            retailerRepository,
+            supplierRepository,
+            supplierRetailerRepository,
+            new DateTimeService(),
+            Mapper);
     }
     
     [Fact]

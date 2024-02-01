@@ -16,6 +16,8 @@ public static class DependencyInjection
         services.AddScoped<ISupplierStoreItemService, SupplierStoreItemService>();
         services.AddScoped<ISupplierRetailerService, SupplierRetailerService>();
         services.AddSingleton<IDateTimeService, DateTimeService>();
+
+        services.AddAutoMapper(typeof(DependencyInjection).Assembly);
         
         return services;
     }
