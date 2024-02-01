@@ -16,14 +16,14 @@ public class StoreItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetStoreItems(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<StoreItemDto>>> GetStoreItems(CancellationToken cancellationToken)
     {
         var storeItems = await _storeItemService.GetStoreItemsAsync(cancellationToken);
         return Ok(storeItems);
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetStoreItemDetails(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<StoreItemDto>> GetStoreItemDetails(int id, CancellationToken cancellationToken)
     {
         var storeItem = await _storeItemService.GetStoreItemAsync(id, cancellationToken);
         return Ok(storeItem);

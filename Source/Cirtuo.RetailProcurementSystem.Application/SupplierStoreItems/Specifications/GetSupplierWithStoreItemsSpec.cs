@@ -9,6 +9,8 @@ public sealed class GetSupplierWithStoreItemsSpec : Specification<Supplier>
     {
         Query
             .Where(x => x.Id == supplierId)
+            .Include(x => x.Location)
+            .Include(x => x.Contact)
             .Include(x => x.SupplierStoreItems);
     }
 }

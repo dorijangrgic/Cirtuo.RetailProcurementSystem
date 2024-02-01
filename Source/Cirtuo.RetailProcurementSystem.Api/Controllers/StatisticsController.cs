@@ -1,5 +1,7 @@
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Services;
+using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
+using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +24,7 @@ public class StatisticsController : ControllerBase
     }
 
     [HttpGet("supplier/{id}")]
-    public async Task<IActionResult> GetSupplierSoldItemsCount(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<SupplierSoldItemsResponse>> GetSupplierSoldItemsCount(int id, CancellationToken cancellationToken)
     {
         var count = await _supplierStoreItemService.GetSoldItemsCountAsync(id, cancellationToken);
         return Ok(count);
@@ -43,7 +45,7 @@ public class StatisticsController : ControllerBase
     }
     
     [HttpGet("quarterly-plan")]
-    public async Task<IActionResult> GetSuppliersForCurrentQuarter(CancellationToken cancellationToken)
+    public async Task<ActionResult<SupplierDto>> GetSuppliersForCurrentQuarter(CancellationToken cancellationToken)
     {
         var suppliers = await _supplierRetailerService.GetSuppliersForCurrentQuarterAsync(cancellationToken);
         return Ok(suppliers);

@@ -2,7 +2,7 @@ using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
 
-namespace Cirtuo.RetailProcurementSystem.Application.Test.Builders;
+namespace Cirtuo.RetailProcurementSystem.Testing.Builders;
 
 public class SupplierStoreItemDtoBuilder
 {

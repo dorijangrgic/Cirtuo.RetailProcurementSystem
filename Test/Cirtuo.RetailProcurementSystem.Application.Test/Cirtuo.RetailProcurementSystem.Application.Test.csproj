@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Source\Cirtuo.RetailProcurementSystem.Persistence\Cirtuo.RetailProcurementSystem.Persistence.csproj" />
+      <ProjectReference Include="..\Cirtuo.RetailProcurementSystem.Testing\Cirtuo.RetailProcurementSystem.Testing.csproj" />
     </ItemGroup>
 
 </Project>

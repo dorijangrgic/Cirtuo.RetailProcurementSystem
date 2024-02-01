@@ -1,7 +1,6 @@
-using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.Common.Models;
 
-namespace Cirtuo.RetailProcurementSystem.Application.Test.Builders;
+namespace Cirtuo.RetailProcurementSystem.Testing.Builders;
 
 public class ContactDtoBuilder
 {

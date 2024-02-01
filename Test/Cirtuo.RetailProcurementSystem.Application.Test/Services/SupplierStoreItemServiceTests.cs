@@ -1,8 +1,9 @@
 using Cirtuo.RetailProcurementSystem.Application.Common;
+using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Services;
-using Cirtuo.RetailProcurementSystem.Application.Test.Builders;
 using Cirtuo.RetailProcurementSystem.Domain;
 using Cirtuo.RetailProcurementSystem.Persistence;
+using Cirtuo.RetailProcurementSystem.Testing.Builders;
 using FluentAssertions;
 
 namespace Cirtuo.RetailProcurementSystem.Application.Test.Services;
@@ -145,10 +146,11 @@ public class SupplierStoreItemServiceTests : IntegrationTestFixture
         // Arrange
         await _supplierStoreItemRepository.DeleteRangeAsync(await _supplierStoreItemRepository.ListAsync());
         const int supplierId = 40;
+        var supplier = SupplierDtoBuilder.Default().WithId(supplierId).Build();
         var supplierStoreItemDto1 = SupplierStoreItemDtoBuilder
             .Default()
             .WithSoldItems(123)
-            .WithSupplier(SupplierDtoBuilder.Default().WithId(supplierId).Build())
+            .WithSupplier(supplier)
             .WithStoreItem(StoreItemDtoBuilder.Default().WithId(21).Build())
             .Build();
         await _supplierStoreItemService.ConnectSupplierStoreItemAsync(supplierStoreItemDto1, default);
@@ -156,7 +158,7 @@ public class SupplierStoreItemServiceTests : IntegrationTestFixture
         var supplierStoreItemDto2 = SupplierStoreItemDtoBuilder
             .Default()
             .WithSoldItems(32)
-            .WithSupplier(SupplierDtoBuilder.Default().WithId(supplierId).Build())
+            .WithSupplier(supplier)
             .WithStoreItem(StoreItemDtoBuilder.Default().WithId(22).Build())
             .Build();
         await _supplierStoreItemService.ConnectSupplierStoreItemAsync(supplierStoreItemDto2, default);
@@ -164,16 +166,21 @@ public class SupplierStoreItemServiceTests : IntegrationTestFixture
         var supplierStoreItemDto3 = SupplierStoreItemDtoBuilder
             .Default()
             .WithSoldItems(899)
-            .WithSupplier(SupplierDtoBuilder.Default().WithId(supplierId).Build())
+            .WithSupplier(supplier)
             .WithStoreItem(StoreItemDtoBuilder.Default().WithId(23).Build())
             .Build();
         await _supplierStoreItemService.ConnectSupplierStoreItemAsync(supplierStoreItemDto3, default);
+
+        var supplierSoldItems = SupplierSoldItemsResponseBuilder.Default()
+            .WithSupplierDto(supplier)
+            .WithSoldItemsCount(supplierStoreItemDto1.SoldItems + supplierStoreItemDto2.SoldItems + supplierStoreItemDto3.SoldItems)
+            .Build();
         
         // Act
-        var soldItemsCount = await _supplierStoreItemService.GetSoldItemsCountAsync(supplierId, default);
+        var soldItems = await _supplierStoreItemService.GetSoldItemsCountAsync(supplierId, default);
         
         // Assert
-        soldItemsCount.Should().Be(supplierStoreItemDto1.SoldItems + supplierStoreItemDto2.SoldItems + supplierStoreItemDto3.SoldItems);
+        soldItems.ItemsCount.Should().Be(supplierSoldItems.ItemsCount);
     }
     
     [Fact]

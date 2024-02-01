@@ -9,6 +9,7 @@ public static class DependencyInjection
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        
         services
             .AddControllers()
             .AddJsonOptions(opts =>
@@ -16,8 +17,7 @@ public static class DependencyInjection
                 var enumConverter = new JsonStringEnumConverter();
                 opts.JsonSerializerOptions.Converters.Add(enumConverter);
             });
-        
-        
+
         services.AddExceptionHandler<BadRequestExceptionHandler>();
         services.AddExceptionHandler<NotFoundExceptionHandler>();
         services.AddProblemDetails();

@@ -16,7 +16,7 @@ public class SupplierStoreItemsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllSupplierStoreItems(CancellationToken cancellationToken)
+    public async Task<ActionResult<SupplierStoreItemDto>> GetAllSupplierStoreItems(CancellationToken cancellationToken)
     {
         var supplierStoreItems = await _supplierStoreItemService.GetSupplierStoreItemsAsync(cancellationToken);
         return Ok(supplierStoreItems);

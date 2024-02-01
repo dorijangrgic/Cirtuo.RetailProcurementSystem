@@ -16,14 +16,14 @@ public class SuppliersController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetSuppliers(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<SupplierDto>>> GetSuppliers(CancellationToken cancellationToken)
     {
         var suppliers = await _supplierService.GetSuppliersAsync(cancellationToken);
         return Ok(suppliers);
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetSupplierDetails(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<SupplierDto>> GetSupplierDetails(int id, CancellationToken cancellationToken)
     {
         var supplier = await _supplierService.GetSupplierAsync(id, cancellationToken);
         return Ok(supplier);

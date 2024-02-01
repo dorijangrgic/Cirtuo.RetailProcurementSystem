@@ -1,8 +1,8 @@
 using Cirtuo.RetailProcurementSystem.Application.Common;
 using Cirtuo.RetailProcurementSystem.Application.Suppliers.Services;
-using Cirtuo.RetailProcurementSystem.Application.Test.Builders;
 using Cirtuo.RetailProcurementSystem.Domain;
 using Cirtuo.RetailProcurementSystem.Persistence;
+using Cirtuo.RetailProcurementSystem.Testing.Builders;
 using FluentAssertions;
 
 namespace Cirtuo.RetailProcurementSystem.Application.Test.Services;

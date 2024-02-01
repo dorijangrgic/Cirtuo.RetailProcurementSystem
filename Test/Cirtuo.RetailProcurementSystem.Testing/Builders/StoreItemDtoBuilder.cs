@@ -1,7 +1,7 @@
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.StoreItems.Specifications;
 
-namespace Cirtuo.RetailProcurementSystem.Application.Test.Builders;
+namespace Cirtuo.RetailProcurementSystem.Testing.Builders;
 
 public class StoreItemDtoBuilder
 {

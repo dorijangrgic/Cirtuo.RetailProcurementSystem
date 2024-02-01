@@ -1,6 +1,6 @@
 using Cirtuo.RetailProcurementSystem.Application.SupplierRetailers.Models;
 
-namespace Cirtuo.RetailProcurementSystem.Application.Test.Builders;
+namespace Cirtuo.RetailProcurementSystem.Testing.Builders;
 
 public class ConnectSupplierRetailerRequestBuilder
 {

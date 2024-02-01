@@ -1,5 +1,6 @@
 using AutoMapper;
 using Cirtuo.RetailProcurementSystem.Application.Common;
+using Cirtuo.RetailProcurementSystem.Application.Suppliers.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Models;
 using Cirtuo.RetailProcurementSystem.Application.SupplierStoreItems.Specifications;
 using Cirtuo.RetailProcurementSystem.Domain;
@@ -80,14 +81,14 @@ public class SupplierStoreItemService : ISupplierStoreItemService
         await _supplierStoreItemRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<int> GetSoldItemsCountAsync(int id, CancellationToken cancellationToken)
+    public async Task<SupplierSoldItemsResponse> GetSoldItemsCountAsync(int id, CancellationToken cancellationToken)
     {
         var getSupplierSpec = new GetSupplierWithStoreItemsSpec(id);
         var supplier = await _supplierRepository.FirstOrDefaultAsync(getSupplierSpec, cancellationToken);
         if (supplier is null) throw new NotFoundException($"Supplier with id {id} does not exist");
         
         var soldItemsCount = supplier.SupplierStoreItems.Sum(x => x.SoldItems);
-        return soldItemsCount;
+        return new SupplierSoldItemsResponse(_mapper.Map<SupplierDto>(supplier), soldItemsCount);
     }
 
     public async Task<SupplierStoreItemDto> GetLowestItemPriceForProductAsync(int productId, CancellationToken cancellationToken)
